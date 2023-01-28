@@ -17,7 +17,7 @@ public class SaqueService {
     SaqueRepository saqueRepository;
 
 
-    public Saque save(int tipoDoEstabelecimento,String nomeDoEstabelecimento,Long  numeroDoCartao,Double valorDaCompra){
+    public Saque save(int tipoDoEstabelecimento,String nomeDoEstabelecimento,Long  numeroDoCartao,Double valorDaCompra, Double cashback, Double taxa){
 
 
     Saque extrato = Saque.builder()
@@ -25,6 +25,8 @@ public class SaqueService {
             .tipoDoEstabelecimento(tipoDoEstabelecimento)
             .numeroDoCartao(numeroDoCartao)
             .valorDaCompra(valorDaCompra)
+            .cashback(cashback)
+            .taxa(taxa)
             .build();
 
 

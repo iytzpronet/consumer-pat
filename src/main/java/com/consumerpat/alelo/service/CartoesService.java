@@ -54,26 +54,35 @@ public class CartoesService {
 
         Optional<Cartoes> opCartoes = cartaoRepository.findCartoesByNumeroDoCartao(numeroDoCartao);
         Saque extrato = null;
-
+        Double cashback = 0.0;
+        Double taxa = 0.0;
+        
 
         if (opCartoes.isPresent()) {
             Cartoes cartoes = opCartoes.get();
 
+            if (Alimentacao(cartoes)){
+               cashback = valorDaCompra * 0.1;
+               // Double cashback  = (value / 100) * 10;
+            } else if (Combustivel(cartoes)){
+                 taxa = valorDaCompra * 0.35;
+              //Double tax  = (value / 100) * 35;
+            }
 
             if (cartoes.getTipoCartao().getCodigo() != (tipoDoEstabelecimento)) {
 
                 throw new RegrasException("Tipo do estabelecimento e diferente do tipo do cartao utilizado !");
             }
 
-            if (cartoes.getSaldo() < valorDaCompra) {
+            if (cartoes.getSaldo() < (valorDaCompra - cashback) || cartoes.getSaldo()<(valorDaCompra + taxa)) {
                 throw new RegrasException("Saldo insuficiente !!!");
             }
 
 
-            cartoes.setSaldo(cartoes.getSaldo() - valorDaCompra);
+            cartoes.setSaldo(cartoes.getSaldo() - (valorDaCompra - cashback + taxa));
             cartaoRepository.save(cartoes);
 
-            extrato = saqueService.save(tipoDoEstabelecimento, nomeDoEstabelecimento, numeroDoCartao, valorDaCompra);
+            extrato = saqueService.save(tipoDoEstabelecimento, nomeDoEstabelecimento, numeroDoCartao, valorDaCompra, cashback, taxa);
 
         }
 

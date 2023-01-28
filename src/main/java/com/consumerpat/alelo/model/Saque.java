@@ -23,8 +23,9 @@ public class Saque {
     String nomeDoEstabelecimento;
     Long numeroDoCartao;
     Double valorDaCompra;
+    Double cashback;
+    Double taxa;
 
-
-
-    
 }
+
+
